@@ -1,11 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Model\Template;
 
 /**
  * Template Filter Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Filter extends \Magento\Cms\Model\Template\Filter
 {
@@ -21,7 +23,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
 
     /**
      * @param \Magento\Framework\Stdlib\String $string
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -33,10 +35,11 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      * @param \Magento\Backend\Model\UrlInterface $backendUrlBuilder
      * @param \Magento\Widget\Model\Resource\Widget $widgetResource
      * @param \Magento\Widget\Model\Widget $widget
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Stdlib\String $string,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,

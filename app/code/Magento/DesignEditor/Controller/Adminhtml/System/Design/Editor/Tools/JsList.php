@@ -1,8 +1,12 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor\Tools;
 
 class JsList extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor\Tools
@@ -24,7 +28,7 @@ class JsList extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\Ed
                 $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
             );
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
     }
 }

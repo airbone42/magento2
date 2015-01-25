@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 namespace Magento\Customer\Model;
 
@@ -25,7 +28,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Mail\Exception as MailException;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Math\Random;
@@ -311,7 +314,7 @@ class AccountManagement implements AccountManagementInterface
             );
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
-            $this->logger->logException($e);
+            $this->logger->critical($e);
         }
     }
 
@@ -431,7 +434,7 @@ class AccountManagement implements AccountManagementInterface
             }
         } catch (MailException $e) {
             // If we are not able to send a reset password email, this should be ignored
-            $this->logger->logException($e);
+            $this->logger->critical($e);
         }
     }
 
@@ -584,7 +587,7 @@ class AccountManagement implements AccountManagementInterface
             }
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
-            $this->logger->logException($e);
+            $this->logger->critical($e);
         }
     }
 
@@ -638,7 +641,7 @@ class AccountManagement implements AccountManagementInterface
         try {
             $this->sendPasswordResetNotificationEmail($customer);
         } catch (MailException $e) {
-            $this->logger->logException($e);
+            $this->logger->critical($e);
         }
 
         return true;
@@ -682,7 +685,7 @@ class AccountManagement implements AccountManagementInterface
     public function validate(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
         $customerErrors = $this->validator->validateData(
-            $this->extensibleDataObjectConverter->toFlatArray($customer),
+            $this->extensibleDataObjectConverter->toFlatArray($customer, [], '\Magento\Customer\Api\Data\CustomerInterface'),
             [],
             'customer'
         );

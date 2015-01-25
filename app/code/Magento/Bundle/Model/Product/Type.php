@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Bundle\Model\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -9,6 +13,9 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Bundle Type Model
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 {
@@ -141,7 +148,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Catalog\Helper\Data $catalogData
@@ -167,7 +174,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Catalog\Helper\Data $catalogData,
@@ -340,6 +347,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this|void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function beforeSave($product)
     {
@@ -384,6 +392,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function save($product)
     {
@@ -590,6 +599,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function isSalable($product)
     {
@@ -648,6 +659,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @param string $processMode
      * @return array|string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareProduct(\Magento\Framework\Object $buyRequest, $product, $processMode)
     {
@@ -1013,6 +1027,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return boolean true
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getForceChildItemQtyChanges($product)
     {

@@ -1,8 +1,12 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Checkout\Controller\Cart;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -61,6 +65,7 @@ class Add extends \Magento\Checkout\Controller\Cart
      * Add product to shopping cart action
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
@@ -134,7 +139,7 @@ class Add extends \Magento\Checkout\Controller\Cart
             }
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We cannot add this item to your shopping cart'));
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $this->_goBack();
         }
     }

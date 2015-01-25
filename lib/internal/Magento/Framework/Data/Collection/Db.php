@@ -1,16 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Collection;
 
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Base items collection class
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Db extends \Magento\Framework\Data\Collection
 {
@@ -709,7 +711,7 @@ class Db extends \Magento\Framework\Data\Collection
      */
     protected function _logQuery($sql)
     {
-        $this->_logger->log(is_null($sql) ? $this->getSelect()->__toString() : $sql);
+        $this->_logger->info(is_null($sql) ? $this->getSelect()->__toString() : $sql);
     }
 
     /**

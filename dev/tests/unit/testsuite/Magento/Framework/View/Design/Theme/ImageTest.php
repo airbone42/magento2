@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Test theme image model
@@ -86,7 +89,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->_imageMock = $this->getMock('Magento\Framework\Image', [], [], '', false, false);
         $imageFactory->expects($this->any())->method('create')->will($this->returnValue($this->_imageMock));
 
-        $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false, false);
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $this->_themeMock = $this->getMock('Magento\Core\Model\Theme', ['__wakeup'], [], '', false, false);
         $this->_uploaderMock = $this->getMock(
             'Magento\Framework\View\Design\Theme\Image\Uploader',
