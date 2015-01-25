@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
@@ -57,12 +58,14 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * Save product action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
         $storeId = $this->getRequest()->getParam('store');
         $redirectBack = $this->getRequest()->getParam('back', false);
         $productId = $this->getRequest()->getParam('id');
+        $resultRedirect = $this->resultRedirectFactory->create();
 
         $data = $this->getRequest()->getPost();
         if ($data) {
@@ -116,14 +119,17 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $this->_session->setProductData($data);
                 $redirectBack = $productId ? true : 'new';
             } catch (\Exception $e) {
-                $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+                $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                 $this->messageManager->addError($e->getMessage());
                 $this->_session->setProductData($data);
                 $redirectBack = $productId ? true : 'new';
             }
+        } else {
+            $resultRedirect->setPath('catalog/*/', ['store' => $storeId]);
+            $this->messageManager->addError('No data to save');
+            return $resultRedirect;
         }
 
-        $resultRedirect = $this->resultRedirectFactory->create();
         if ($redirectBack === 'new') {
             $resultRedirect->setPath(
                 'catalog/*/new',

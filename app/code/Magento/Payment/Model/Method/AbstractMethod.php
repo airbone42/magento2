@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Payment\Model\Method;
 
 use Magento\Payment\Model\Checks\PaymentMethodChecksInterface;
@@ -12,6 +16,8 @@ use Magento\Sales\Model\Order\Payment;
 /**
  * Payment method abstract model
  * @method AbstractMethod setStore()
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 abstract class AbstractMethod extends \Magento\Framework\Object implements MethodInterface, PaymentMethodChecksInterface
 {
@@ -69,6 +75,13 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      * @var bool
      */
     protected $_isGateway = false;
+
+    /**
+     * Payment Method feature
+     *
+     * @var bool
+     */
+    protected $_isOffline = false;
 
     /**
      * Payment Method feature
@@ -197,33 +210,29 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
     protected $_eventManager;
 
     /**
-     * Log adapter factory
-     *
-     * @var \Magento\Framework\Logger\AdapterFactory
+     * @var \Psr\Log\LoggerInterface
      */
-    protected $_logAdapterFactory;
+    protected $logger;
 
     /**
-     * Construct
-     *
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
+     * @param \Psr\Log\LoggerInterface $logger
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
+        \Psr\Log\LoggerInterface $logger,
         array $data = []
     ) {
         parent::__construct($data);
+        $this->logger = $logger;
         $this->_eventManager = $eventManager;
         $this->_paymentData = $paymentData;
         $this->_scopeConfig = $scopeConfig;
-        $this->_logAdapterFactory = $logAdapterFactory;
     }
 
     /**
@@ -301,6 +310,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      *
      * @param   \Magento\Framework\Object $payment
      * @return  bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function canVoid(\Magento\Framework\Object $payment)
     {
@@ -354,6 +364,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      * @param \Magento\Payment\Model\Info $payment
      * @param string $transactionId
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetchTransactionInfo(\Magento\Payment\Model\Info $payment, $transactionId)
     {
@@ -368,6 +379,16 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
     public function isGateway()
     {
         return $this->_isGateway;
+    }
+
+    /**
+     * Retrieve payment method online/offline flag
+     *
+     * @return bool
+     */
+    public function isOffline()
+    {
+        return $this->_isOffline;
     }
 
     /**
@@ -405,6 +426,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      *
      * @param string $currencyCode
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function canUseForCurrency($currencyCode)
     {
@@ -493,6 +515,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      *
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function order(\Magento\Framework\Object $payment, $amount)
     {
@@ -510,6 +533,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      *
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function authorize(\Magento\Framework\Object $payment, $amount)
     {
@@ -527,6 +551,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      *
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function capture(\Magento\Framework\Object $payment, $amount)
     {
@@ -574,6 +599,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function refund(\Magento\Framework\Object $payment, $amount)
     {
@@ -601,6 +627,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      * @param \Magento\Framework\Object $payment
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function cancel(\Magento\Framework\Object $payment)
     {
@@ -627,6 +654,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      *
      * @param \Magento\Payment\Model\Info $payment
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function canReviewPayment(\Magento\Payment\Model\Info $payment)
     {
@@ -721,7 +749,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      *
      * TODO: payment method instance is not supposed to know about quote
      *
-     * @param \Magento\Sales\Model\Quote|null $quote
+     * @param \Magento\Quote\Model\Quote|null $quote
      * @return bool
      */
     public function isAvailable($quote = null)
@@ -747,6 +775,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      * @param object $stateObject
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function initialize($paymentAction, $stateObject)
     {
@@ -773,13 +802,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
     protected function _debug($debugData)
     {
         if ($this->getDebugFlag()) {
-            $this->_logAdapterFactory->create(
-                ['fileName' => 'payment_' . $this->getCode() . '.log']
-            )->setFilterDataKeys(
-                $this->_debugReplacePrivateDataKeys
-            )->log(
-                $debugData
-            );
+            $this->logger->debug($debugData);
         }
     }
 
@@ -787,6 +810,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      * Define if debugging is enabled
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getDebugFlag()
     {
